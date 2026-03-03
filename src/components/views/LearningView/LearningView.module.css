@@ -1,0 +1,124 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--gray-500);
+  font-family: var(--font-sans);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 7px;
+  transition: all 0.18s;
+}
+
+.backBtn:hover {
+  background: var(--blue-light);
+  color: var(--blue);
+}
+
+.sourceTag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  color: var(--gray-500);
+}
+
+/* Card Stack */
+.cardStack {
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.cardStack::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 8px;
+  right: 8px;
+  height: 100%;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  z-index: 1;
+  opacity: 0.6;
+}
+
+.cardStack::before {
+  content: '';
+  position: absolute;
+  bottom: -13px;
+  left: 16px;
+  right: 16px;
+  height: 100%;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  z-index: 0;
+  opacity: 0.35;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navCard {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 20px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  border: none;
+}
+
+.navPrev {
+  background: var(--white);
+  color: var(--gray-500);
+  border: 1.5px solid var(--gray-200);
+}
+
+.navPrev:hover:not(:disabled) {
+  background: var(--gray-100);
+  color: var(--gray-900);
+}
+
+.navPrev:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.navNext {
+  background: var(--blue);
+  color: white;
+}
+
+.navNext:hover:not(:disabled) {
+  background: var(--blue-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(26, 107, 255, 0.3);
+}
+
+.navNext:disabled {
+  background: var(--gray-200);
+  color: var(--gray-500);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

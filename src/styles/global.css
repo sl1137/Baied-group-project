@@ -1,0 +1,124 @@
+:root {
+  --blue:        #1A6BFF;
+  --blue-light:  #EEF3FF;
+  --blue-mid:    #C5D8FF;
+  --blue-dark:   #1558e6;
+  --gray-50:     #F9FAFB;
+  --gray-100:    #F5F7FA;
+  --gray-200:    #E8ECF0;
+  --gray-300:    #D1D9E0;
+  --gray-500:    #8A94A6;
+  --gray-700:    #4A5568;
+  --gray-900:    #1A1D23;
+  --white:       #FFFFFF;
+  --green:       #10B981;
+  --green-light: #ECFDF5;
+  --red:         #EF4444;
+  --red-light:   #FEF2F2;
+  --orange-light:#FFF7ED;
+  --orange:      #EA580C;
+  --amber:       #D97706;
+  --amber-light: #FEF3C7;
+  --teal:        #0D9488;
+  --teal-light:  #F0FDFA;
+
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --font-sans:  'DM Sans', system-ui, sans-serif;
+
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  --shadow-sm:   0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 4px 20px rgba(26,107,255,0.08), 0 1px 4px rgba(0,0,0,0.06);
+  --shadow-lg:   0 8px 32px rgba(26,107,255,0.14), 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-card: 0 2px 24px rgba(26,107,255,0.09), 0 1px 4px rgba(0,0,0,0.05);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--gray-100);
+  color: var(--gray-900);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+/* ─── Global card content classes (used inside dangerouslySetInnerHTML) ─── */
+
+.kblock {
+  background: var(--blue-light);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 13px 15px;
+  margin: 14px 0;
+}
+
+.kblock-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 3px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.kblock-desc {
+  font-size: 13.5px;
+  color: var(--gray-700);
+  line-height: 1.6;
+}
+
+/* ─── Card animation classes (referenced by useCardAnimation hook) ─── */
+
+.out-left  { animation: slideOutL 0.26s ease forwards; }
+.out-right { animation: slideOutR 0.26s ease forwards; }
+.in-left   { animation: slideInL  0.32s cubic-bezier(0.22, 0.68, 0, 1.1) forwards; }
+.in-right  { animation: slideInR  0.32s cubic-bezier(0.22, 0.68, 0, 1.1) forwards; }
+
+/* ─── Keyframes ─── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideOutL {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-52px); }
+}
+
+@keyframes slideOutR {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(52px); }
+}
+
+@keyframes slideInL {
+  from { opacity: 0; transform: translateX(52px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInR {
+  from { opacity: 0; transform: translateX(-52px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
+  40%           { transform: translateY(-11px); opacity: 1; }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.2); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}

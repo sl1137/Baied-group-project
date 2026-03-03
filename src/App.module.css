@@ -1,0 +1,14 @@
+.main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 52px 24px 96px;
+}
+
+.view {
+  display: none;
+}
+
+.active {
+  display: block;
+  animation: fadeUp 0.38s cubic-bezier(0.22, 0.68, 0, 1.2) both;
+}

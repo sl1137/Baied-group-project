@@ -1,0 +1,149 @@
+.scene {
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 52px 52px 44px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Loading state */
+.dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  background: var(--blue);
+  border-radius: 50%;
+  animation: dotBounce 1.2s ease-in-out infinite;
+}
+
+.dot:nth-child(2) { animation-delay: 0.18s; }
+.dot:nth-child(3) { animation-delay: 0.36s; }
+.dot:nth-child(4) { animation-delay: 0.54s; }
+
+.track {
+  height: 3px;
+  background: var(--gray-200);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 22px;
+}
+
+.fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), #60A5FA);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  color: var(--gray-900);
+  margin-bottom: 6px;
+}
+
+.sub {
+  font-size: 14px;
+  color: var(--gray-500);
+  margin-bottom: 24px;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  text-align: left;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--gray-500);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.activeStep {
+  color: var(--blue);
+  font-weight: 500;
+}
+
+.stepDot {
+  width: 5px;
+  height: 5px;
+  background: var(--blue);
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+
+.stepDone {
+  background: var(--green);
+}
+
+/* Error state */
+.errorIcon {
+  font-size: 40px;
+  margin-bottom: 14px;
+}
+
+.errorTitle {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: var(--gray-900);
+  margin-bottom: 12px;
+}
+
+.errorMsg {
+  font-size: 14px;
+  color: var(--gray-700);
+  line-height: 1.65;
+  margin-bottom: 28px;
+  white-space: pre-line;
+}
+
+.backBtn {
+  padding: 11px 24px;
+  background: var(--blue-light);
+  color: var(--blue);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.backBtn:hover {
+  background: var(--blue-mid);
+}
+
+@media (max-width: 580px) {
+  .box {
+    padding: 36px 24px;
+  }
+}
