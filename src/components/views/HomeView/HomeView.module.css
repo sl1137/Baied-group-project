@@ -17,17 +17,13 @@
 }
 
 .hero h1 {
-  font-family: var(--font-serif);
-  font-size: clamp(36px, 5vw, 54px);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 900;
   color: var(--gray-900);
   line-height: 1.1;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   margin: 0 0 18px;
-}
-
-.hero h1 em {
-  font-style: italic;
-  color: var(--gray-900);
 }
 
 .hero p {

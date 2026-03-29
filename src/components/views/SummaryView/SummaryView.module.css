@@ -266,7 +266,7 @@
 .btnPrimary {
   flex: 1;
   padding: 14px 20px;
-  background: var(--gray-900);
+  background: var(--blue);
   color: white;
   border: none;
   border-radius: var(--radius-md);
@@ -274,11 +274,11 @@
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  transition: opacity 0.18s;
+  transition: background 0.18s;
 }
 
 .btnPrimary:hover {
-  opacity: 0.88;
+  background: var(--blue-dark);
 }
 
 .emptyHint {

@@ -37,7 +37,7 @@ export default function TrueFalseCard({ card, cardIndex, total, answer, onPick }
       <div className={styles.tfStatement}>
         <p><em>"{card.title}"</em></p>
       </div>
-      <div className={styles.cardBody} style={{ flex: 1 }}>
+      <div className={styles.cardBody}>
         <div className={styles.tfBtns}>
           <button
             className={getBtnCls('T')}

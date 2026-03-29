@@ -78,6 +78,9 @@ export const translations = {
     signUpBtn: '注册',
     toSignUp: '没有账号？注册',
     toSignIn: '已有账号？登录',
+    errRequired: '用户名和密码不能为空',
+    errTaken: '用户名已被占用',
+    errInvalid: '用户名或密码错误',
   },
   en: {
     archive: 'Archive',
@@ -156,5 +159,8 @@ export const translations = {
     signUpBtn: 'Sign up',
     toSignUp: "Don't have an account? Sign up",
     toSignIn: 'Already have an account? Sign in',
+    errRequired: 'Username and password are required',
+    errTaken: 'Username already taken',
+    errInvalid: 'Invalid username or password',
   },
 } as const;

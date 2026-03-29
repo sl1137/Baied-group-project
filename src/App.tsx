@@ -33,6 +33,7 @@ export default function App() {
   const [archive, setArchiveState] = useState<ArchiveEntry[]>([]);
   const [bookmarks, setBookmarksState] = useState<BookmarkEntry[]>([]);
   const [generatedCards, setGeneratedCards] = useState<Card[]>([]);
+  const [articleText, setArticleText] = useState<string>('');
   const [summaryData, setSummaryData] = useState<SummaryData>({ insights: [], relatedReading: [] });
   const [lang, setLang] = useState<Lang>('en');
 
@@ -99,6 +100,7 @@ export default function App() {
       try {
         setLoadingStep(1);
         const text = await getText();
+        setArticleText(text);
 
         setLoadingStep(2);
         await sleep(300);
@@ -219,7 +221,8 @@ export default function App() {
     setIdx(0);
     setAnswers({});
     setSaved(false);
-  }, []);
+    goToView('learning');
+  }, [goToView]);
 
   const handleViewSummary = useCallback(async () => {
     // Auto-save to archive when entering summary
@@ -342,6 +345,7 @@ export default function App() {
             idx={idx}
             answers={answers}
             animClass={animClass}
+            articleText={articleText}
             onPrev={handlePrev}
             onNext={handleNext}
             onPickOption={handlePickOption}

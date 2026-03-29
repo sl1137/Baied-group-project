@@ -54,7 +54,7 @@ export default function HomeView({ onStart }: Props) {
           </svg>
           {tr.eyebrow}
         </div>
-        <h1><em>{tr.heroTitle}</em></h1>
+        <h1>{tr.heroTitle}</h1>
         <p>{tr.heroDesc}</p>
       </div>
 

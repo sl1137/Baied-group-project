@@ -5,6 +5,7 @@ import ReviewCard from '../../cards/ReviewCard';
 import OutputCard from '../../cards/OutputCard';
 import TrueFalseCard from '../../cards/TrueFalseCard';
 import ProgressBar from '../../ui/ProgressBar/ProgressBar';
+import ChatPanel from '../../ChatPanel/ChatPanel';
 import { useLang } from '../../../context/LangContext';
 import cardStyles from '../../cards/cards.module.css';
 import styles from './LearningView.module.css';
@@ -15,6 +16,7 @@ interface Props {
   idx: number;
   answers: Answers;
   animClass: string;
+  articleText: string;
   onPrev: () => void;
   onNext: () => void;
   onPickOption: (cardIndex: number, letter: string) => void;
@@ -28,6 +30,7 @@ export default function LearningView({
   idx,
   answers,
   animClass,
+  articleText,
   onPrev,
   onNext,
   onPickOption,
@@ -65,7 +68,7 @@ export default function LearningView({
       <ProgressBar current={idx + 1} total={total} />
 
       <div className={styles.cardStack}>
-        <div className={`${cardStyles.learnCard} ${animClass}`}>
+        <div className={`${cardStyles.learnCard} ${card.type === 'truefalse' ? cardStyles.learnCardCompact : ''} ${animClass}`}>
           {card.type === 'content' && (
             <ContentCard card={card} cardIndex={idx} total={total} />
           )}
@@ -114,6 +117,8 @@ export default function LearningView({
           )
         )}
       </div>
+
+      <ChatPanel articleText={articleText} />
     </div>
   );
 }

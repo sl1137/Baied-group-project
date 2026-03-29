@@ -24,7 +24,12 @@ export default function AuthView({ onAuth }: Props) {
       : await register(username, password);
     setLoading(false);
     if (err) {
-      setError(err);
+      const msg =
+        err === 'err:required' ? tr.errRequired :
+        err === 'err:taken'    ? tr.errTaken :
+        err === 'err:invalid'  ? tr.errInvalid :
+        err;
+      setError(msg);
     } else {
       onAuth(username.trim());
     }
