@@ -193,30 +193,6 @@ export default function App() {
     });
   }, [generatedCards]);
 
-  // ─── Save session ─────────────────────────────────────────────────────────────
-  const handleSave = useCallback(async () => {
-    if (saved) return;
-    const quizCards = generatedCards.filter(
-      (c) => c.type === 'quiz' || c.type === 'review' || c.type === 'output' || c.type === 'truefalse'
-    );
-    const correct = quizCards.filter((c) => {
-      const ci = generatedCards.indexOf(c);
-      return answers[ci]?.correct;
-    }).length;
-    const entry: ArchiveEntry = {
-      id: `mk-${Date.now()}`,
-      title: source.title,
-      sourceType: source.type,
-      date: new Date().toISOString().slice(0, 10),
-      score: `${correct}/${quizCards.length}`,
-      perfect: correct === quizCards.length,
-      cards: generatedCards,
-    };
-    await addArchiveEntry(entry);
-    setArchiveState((prev) => [entry, ...prev]);
-    setSaved(true);
-  }, [saved, answers, source, generatedCards]);
-
   const handleRestart = useCallback(() => {
     setIdx(0);
     setAnswers({});
