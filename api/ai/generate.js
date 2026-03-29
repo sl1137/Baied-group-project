@@ -490,7 +490,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'deepseek-chat',
-        max_tokens: 8000,
+        max_tokens: depth === 'deep' ? 8000 : 3500,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userMessage },
