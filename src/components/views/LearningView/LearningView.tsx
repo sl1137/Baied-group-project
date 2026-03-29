@@ -3,8 +3,9 @@ import ContentCard from '../../cards/ContentCard';
 import QuizCard from '../../cards/QuizCard';
 import ReviewCard from '../../cards/ReviewCard';
 import OutputCard from '../../cards/OutputCard';
-import CompleteCard from '../../cards/CompleteCard';
+import TrueFalseCard from '../../cards/TrueFalseCard';
 import ProgressBar from '../../ui/ProgressBar/ProgressBar';
+import { useLang } from '../../../context/LangContext';
 import cardStyles from '../../cards/cards.module.css';
 import styles from './LearningView.module.css';
 
@@ -17,10 +18,8 @@ interface Props {
   onPrev: () => void;
   onNext: () => void;
   onPickOption: (cardIndex: number, letter: string) => void;
-  onSave: () => void;
-  onRestart: () => void;
   onGoHome: () => void;
-  saved: boolean;
+  onViewSummary: () => void;
 }
 
 export default function LearningView({
@@ -32,18 +31,18 @@ export default function LearningView({
   onPrev,
   onNext,
   onPickOption,
-  onSave,
-  onRestart,
   onGoHome,
-  saved,
+  onViewSummary,
 }: Props) {
+  const { tr } = useLang();
   const card = cards[idx];
   const total = cards.length;
-  const isComplete = card.type === 'complete';
+  if (!card) return null;
+
+  const isLastCard = idx === cards.length - 1;
   const needsAnswer =
-    (card.type === 'quiz' || card.type === 'review' || card.type === 'output') &&
+    (card.type === 'quiz' || card.type === 'review' || card.type === 'output' || card.type === 'truefalse') &&
     !answers[idx];
-  const isLastContentCard = idx === cards.length - 2;
 
   return (
     <div>
@@ -52,7 +51,7 @@ export default function LearningView({
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <polyline points="15 18 9 12 15 6" />
           </svg>
-          返回
+          {tr.back}
         </button>
         <div className={styles.sourceTag}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -71,43 +70,16 @@ export default function LearningView({
             <ContentCard card={card} cardIndex={idx} total={total} />
           )}
           {card.type === 'quiz' && (
-            <QuizCard
-              card={card}
-              cardIndex={idx}
-              total={total}
-              answer={answers[idx]}
-              onPick={onPickOption}
-            />
+            <QuizCard card={card} cardIndex={idx} total={total} answer={answers[idx]} onPick={onPickOption} />
           )}
           {card.type === 'review' && (
-            <ReviewCard
-              card={card}
-              cardIndex={idx}
-              total={total}
-              answer={answers[idx]}
-              onPick={onPickOption}
-            />
+            <ReviewCard card={card} cardIndex={idx} total={total} answer={answers[idx]} onPick={onPickOption} />
           )}
           {card.type === 'output' && (
-            <OutputCard
-              card={card}
-              cardIndex={idx}
-              total={total}
-              answer={answers[idx]}
-              onPick={onPickOption}
-            />
+            <OutputCard card={card} cardIndex={idx} total={total} answer={answers[idx]} onPick={onPickOption} />
           )}
-          {card.type === 'complete' && (
-            <CompleteCard
-              cardIndex={idx}
-              total={total}
-              source={source}
-              answers={answers}
-              cards={cards}
-              onSave={onSave}
-              onRestart={onRestart}
-              saved={saved}
-            />
+          {card.type === 'truefalse' && (
+            <TrueFalseCard card={card} cardIndex={idx} total={total} answer={answers[idx]} onPick={onPickOption} />
           )}
         </div>
       </div>
@@ -121,31 +93,25 @@ export default function LearningView({
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <polyline points="15 18 9 12 15 6" />
           </svg>
-          上一张
+          {tr.prev}
         </button>
 
-        {!isComplete && (
-          <button
-            className={`${styles.navCard} ${styles.navNext}`}
-            onClick={onNext}
-            disabled={needsAnswer}
-          >
-            {isLastContentCard ? (
-              <>
-                完成学习
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </>
-            ) : (
-              <>
-                下一张
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </>
-            )}
-          </button>
+        {!needsAnswer && (
+          isLastCard ? (
+            <button className={`${styles.navCard} ${styles.navNext}`} onClick={onViewSummary}>
+              {tr.viewSummaryBtn}
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          ) : (
+            <button className={`${styles.navCard} ${styles.navNext}`} onClick={onNext}>
+              {tr.next}
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          )
         )}
       </div>
     </div>

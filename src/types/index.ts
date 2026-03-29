@@ -1,4 +1,4 @@
-export type ViewId = 'home' | 'loading' | 'learning' | 'archive';
+export type ViewId = 'auth' | 'home' | 'loading' | 'learning' | 'archive' | 'summary';
 
 export interface Source {
   type: 'url' | 'pdf';
@@ -55,11 +55,31 @@ export interface OutputCard {
   explain: string;
 }
 
+export interface TrueFalseCard {
+  type: 'truefalse';
+  tag: string;
+  tagCls: 'tagTf';
+  title: string;
+  correct: 'T' | 'F';
+  explain: string;
+}
+
 export interface CompleteCard {
   type: 'complete';
 }
 
-export type Card = ContentCard | QuizCard | ReviewCard | OutputCard | CompleteCard;
+export type Card = ContentCard | QuizCard | ReviewCard | OutputCard | TrueFalseCard | CompleteCard;
+
+export interface RelatedResource {
+  title: string;
+  url: string;
+  desc: string;
+}
+
+export interface SummaryData {
+  insights: string[];
+  relatedReading: RelatedResource[];
+}
 
 export interface Answer {
   sel: string;
@@ -76,6 +96,15 @@ export interface ArchiveEntry {
   score: string;
   perfect: boolean;
   cards?: Card[];
+  summaryData?: SummaryData;
+}
+
+export interface BookmarkEntry {
+  id: string;
+  title: string;
+  url: string;
+  desc: string;
+  savedAt: string;
 }
 
 export type AnimDirection = 'forward' | 'backward';

@@ -67,4 +67,12 @@ export default defineConfig({
       localsConvention: 'camelCase',
     },
   },
+  server: {
+    proxy: {
+      '/api/ai': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
+  },
 });

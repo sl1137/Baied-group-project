@@ -1,0 +1,146 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-50, #F5F6F7);
+  padding: 24px;
+  gap: 28px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+}
+
+.logoMark {
+  width: 40px;
+  height: 40px;
+  background: var(--blue);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(26, 107, 255, 0.35);
+}
+
+.logoText {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  color: var(--gray-900);
+  letter-spacing: -0.2px;
+}
+
+.logoText b {
+  color: var(--blue);
+  font-weight: 400;
+}
+
+.card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.07);
+  border: 1px solid var(--gray-200);
+  padding: 36px 40px 30px;
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0 0 6px;
+  letter-spacing: -0.3px;
+}
+
+.sub {
+  font-size: 14px;
+  color: var(--gray-500);
+  margin: 0 0 24px;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 12px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--gray-900);
+  background: #fff;
+  outline: none;
+  transition: border-color 0.18s;
+  box-sizing: border-box;
+}
+
+.input::placeholder {
+  color: var(--gray-400);
+}
+
+.input:focus {
+  border-color: var(--blue);
+}
+
+.error {
+  font-size: 13px;
+  color: #EF4444;
+  margin: 0 0 10px;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 13px;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.18s;
+  margin-bottom: 14px;
+  letter-spacing: 0.1px;
+}
+
+.submitBtn:hover {
+  filter: brightness(1.1);
+}
+
+.switchBtn {
+  background: none;
+  border: none;
+  color: var(--gray-500);
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  padding: 0;
+  transition: color 0.18s;
+}
+
+.switchBtn:hover {
+  color: var(--blue);
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 28px 20px 24px;
+  }
+}

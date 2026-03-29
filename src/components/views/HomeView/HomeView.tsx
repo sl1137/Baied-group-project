@@ -1,38 +1,49 @@
 import { useRef, useState } from 'react';
-import PdfDropZone from '../../ui/PdfDropZone/PdfDropZone';
+import { useLang } from '../../../context/LangContext';
 import styles from './HomeView.module.css';
 
+type InputTab = 'url' | 'text' | 'pdf';
+type Depth = 'quick' | 'deep';
+
 interface Props {
-  onStart: (url: string, file: File | null) => void;
-  onLoadDemo: () => void;
-  apiKey: string;
-  onApiKeyChange: (key: string) => void;
+  onStart: (url: string, text: string, file: File | null, depth: Depth) => void;
 }
 
-export default function HomeView({ onStart, onLoadDemo, apiKey, onApiKeyChange }: Props) {
+export default function HomeView({ onStart }: Props) {
+  const { tr } = useLang();
+  const [tab, setTab] = useState<InputTab>('url');
   const [url, setUrl] = useState('');
+  const [text, setText] = useState('');
   const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [depth, setDepth] = useState<Depth>('deep');
   const [shaking, setShaking] = useState(false);
-  const [showApiKey, setShowApiKey] = useState(false);
-  const [keyInput, setKeyInput] = useState(apiKey);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [dragOver, setDragOver] = useState(false);
 
   function handleSubmit() {
-    if (!url.trim() && !pdfFile) {
+    const valid =
+      (tab === 'url' && url.trim()) ||
+      (tab === 'text' && text.trim()) ||
+      (tab === 'pdf' && pdfFile);
+    if (!valid) {
       setShaking(true);
       setTimeout(() => setShaking(false), 500);
       return;
     }
-    // Save API key if user typed one
-    if (keyInput !== apiKey) onApiKeyChange(keyInput.trim());
-    onStart(url, pdfFile);
+    onStart(
+      tab === 'url' ? url : '',
+      tab === 'text' ? text : '',
+      tab === 'pdf' ? pdfFile : null,
+      depth,
+    );
   }
 
-  function handleSaveKey() {
-    onApiKeyChange(keyInput.trim());
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setDragOver(false);
+    const f = e.dataTransfer.files[0];
+    if (f && f.type === 'application/pdf') setPdfFile(f);
   }
-
-  const savedKey = apiKey ? `${apiKey.slice(0, 14)}…` : '';
 
   return (
     <div>
@@ -41,120 +52,127 @@ export default function HomeView({ onStart, onLoadDemo, apiKey, onApiKeyChange }
           <svg width="11" height="11" viewBox="0 0 16 20" fill="currentColor">
             <path d="M9 1L0 11H7L7 19L16 9H9L9 1Z" />
           </svg>
-          碎片化学习工具
+          {tr.eyebrow}
         </div>
-        <h1>
-          把任何内容变成<br />
-          <em>8 张精华卡片</em>
-        </h1>
-        <p>粘贴文章链接或上传 PDF，AI 自动拆解核心知识，逐步引导你完成高效学习。</p>
+        <h1><em>{tr.heroTitle}</em></h1>
+        <p>{tr.heroDesc}</p>
       </div>
 
-      <div ref={cardRef} className={`${styles.inputCard} ${shaking ? styles.shake : ''}`}>
-        <div className={styles.grid}>
-          {/* URL input */}
-          <div>
-            <label className={styles.inputLabel}>文章链接</label>
-            <div className={styles.urlWrap}>
-              <svg
-                className={styles.urlIcon}
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-              </svg>
-              <input
-                type="url"
-                className={styles.urlInput}
-                placeholder="粘贴任意文章链接…"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-              />
-            </div>
-          </div>
-
-          <div className={styles.orDivider}>
-            <span className={styles.orText}>或</span>
-          </div>
-
-          {/* PDF upload */}
-          <div>
-            <label className={styles.inputLabel}>上传 PDF</label>
-            <PdfDropZone file={pdfFile} onFileSelect={setPdfFile} />
-          </div>
+      <div className={`${styles.card} ${shaking ? styles.shake : ''}`}>
+        {/* Tab bar */}
+        <div className={styles.tabBar}>
+          {(['url', 'text', 'pdf'] as InputTab[]).map((t) => (
+            <button
+              key={t}
+              className={`${styles.tab} ${tab === t ? styles.tabActive : ''}`}
+              onClick={() => setTab(t)}
+            >
+              {t === 'url' && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+              )}
+              {t === 'text' && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+              )}
+              {t === 'pdf' && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+              )}
+              {tr[`tab${t.charAt(0).toUpperCase() + t.slice(1)}` as 'tabUrl' | 'tabText' | 'tabPdf']}
+            </button>
+          ))}
         </div>
 
-        {/* API Key section */}
-        <div className={styles.apiSection}>
-          <button
-            className={styles.apiToggle}
-            onClick={() => setShowApiKey(v => !v)}
-            type="button"
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-            {apiKey ? (
-              <span>API Key 已设置 <em className={styles.keyMask}>{savedKey}</em></span>
-            ) : (
-              <span>设置 Anthropic API Key（分析真实文章必填）</span>
-            )}
-            <svg
-              className={`${styles.chevron} ${showApiKey ? styles.chevronOpen : ''}`}
-              width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </button>
-
-          {showApiKey && (
-            <div className={styles.apiExpanded}>
-              <p className={styles.apiHint}>
-                API Key 仅保存在本地浏览器，不会上传。
-                前往 <a href="https://console.anthropic.com/keys" target="_blank" rel="noreferrer">console.anthropic.com</a> 获取。
-              </p>
-              <div className={styles.apiInputRow}>
+        {/* Input area */}
+        <div className={styles.inputArea}>
+          {tab === 'url' && (
+            <input
+              type="url"
+              className={styles.urlInput}
+              placeholder={tr.urlPlaceholder ?? 'Paste an article URL...'}
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+              autoFocus
+            />
+          )}
+          {tab === 'text' && (
+            <textarea
+              className={styles.textArea}
+              placeholder={tr.textPlaceholder}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+          )}
+          {tab === 'pdf' && (
+            <div>
+              <div
+                className={`${styles.dropZone} ${dragOver ? styles.dropOver : ''} ${pdfFile ? styles.dropHasFile : ''}`}
+                onClick={() => fileInputRef.current?.click()}
+                onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                onDragLeave={() => setDragOver(false)}
+                onDrop={handleDrop}
+              >
                 <input
-                  type="password"
-                  className={styles.apiInput}
-                  placeholder="sk-ant-api03-…"
-                  value={keyInput}
-                  onChange={(e) => setKeyInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSaveKey()}
-                  autoComplete="off"
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf"
+                  style={{ display: 'none' }}
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) setPdfFile(f); }}
                 />
-                <button className={styles.apiSaveBtn} onClick={handleSaveKey}>
-                  保存
-                </button>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={styles.dropIcon}>
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                <span className={styles.dropLabel}>
+                  {pdfFile ? pdfFile.name : 'Choose a PDF file'}
+                </span>
               </div>
-              {!apiKey && (
-                <p className={styles.apiWarning}>
-                  ⚠ 未设置 API Key 时只能使用内置示例内容
-                </p>
-              )}
+              <p className={styles.pdfHint}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                {tr.pdfHint}
+              </p>
             </div>
           )}
         </div>
 
-        <button className={styles.cta} onClick={handleSubmit}>
-          开始碎片化学习
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <polyline points="9 18 15 12 9 6" />
-          </svg>
-        </button>
-      </div>
+        {/* Depth selector */}
+        <div className={styles.depthRow}>
+          <button
+            className={`${styles.depthCard} ${depth === 'quick' ? styles.depthActive : ''}`}
+            onClick={() => setDepth('quick')}
+          >
+            <span className={styles.depthTitle}>{tr.quickRead}</span>
+            <span className={styles.depthDesc}>{tr.quickReadDesc}</span>
+          </button>
+          <button
+            className={`${styles.depthCard} ${depth === 'deep' ? styles.depthDark : ''}`}
+            onClick={() => setDepth('deep')}
+          >
+            <span className={styles.depthTitle}>{tr.deepRead}</span>
+            <span className={styles.depthDesc}>{tr.deepReadDesc}</span>
+          </button>
+        </div>
 
-      <div className={styles.demoHint}>
-        <a onClick={onLoadDemo}>
-          没有内容？<u>试试内置示例：机器学习基础</u> ✨
-        </a>
+        {/* Generate button */}
+        <button className={styles.generateBtn} onClick={handleSubmit}>
+          {tr.generateBtn}
+        </button>
       </div>
     </div>
   );

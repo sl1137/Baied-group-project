@@ -40,21 +40,22 @@
 }
 
 .logoText {
-  font-family: var(--font-serif);
-  font-size: 19px;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  font-weight: 600;
   color: var(--gray-900);
-  letter-spacing: -0.2px;
+  letter-spacing: -0.3px;
 }
 
 .logoText b {
   color: var(--blue);
-  font-weight: 400;
+  font-weight: 800;
 }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .hbtn {
@@ -82,11 +83,59 @@
   color: var(--gray-900);
 }
 
-.archive {
-  background: var(--blue-light);
-  color: var(--blue);
+/* Language toggle pill */
+.langToggle {
+  display: flex;
+  align-items: center;
+  background: var(--gray-100);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
 }
 
-.archive:hover {
-  background: var(--blue-mid);
+.langBtn {
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--gray-500);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.langBtn:hover {
+  color: var(--gray-900);
+}
+
+.langActive {
+  background: #fff;
+  color: var(--gray-900);
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.10);
+}
+
+/* Exit button */
+.exitBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--gray-400);
+  cursor: pointer;
+  transition: all 0.18s;
+  flex-shrink: 0;
+}
+
+.exitBtn:hover {
+  background: var(--gray-100);
+  color: var(--gray-700);
 }

@@ -22,8 +22,8 @@
   --teal:        #0D9488;
   --teal-light:  #F0FDFA;
 
-  --font-serif: 'DM Serif Display', Georgia, serif;
-  --font-sans:  'DM Sans', system-ui, sans-serif;
+  --font-serif: 'Inter', system-ui, sans-serif;
+  --font-sans:  'Inter', system-ui, sans-serif;
 
   --radius-lg: 20px;
   --radius-md: 12px;
