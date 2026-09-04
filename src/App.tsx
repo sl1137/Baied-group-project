@@ -21,6 +21,18 @@ import SummaryView from './components/views/SummaryView/SummaryView';
 import styles from './App.module.css';
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+const GUEST_MODE = import.meta.env.VITE_GUEST_MODE !== 'false';
+const GUEST_ARCHIVE_KEY = 'miniknowledge:guest:archive';
+const GUEST_BOOKMARKS_KEY = 'miniknowledge:guest:bookmarks';
+
+function readGuestData<T>(key: string): T[] {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) as T[] : [];
+  } catch {
+    return [];
+  }
+}
 
 export default function App() {
   const [initializing, setInitializing] = useState(true);
@@ -45,6 +57,14 @@ export default function App() {
 
   // ─── Supabase auth init ───────────────────────────────────────────────────────
   useEffect(() => {
+    if (GUEST_MODE) {
+      setArchiveState(readGuestData<ArchiveEntry>(GUEST_ARCHIVE_KEY));
+      setBookmarksState(readGuestData<BookmarkEntry>(GUEST_BOOKMARKS_KEY));
+      setView('home');
+      setInitializing(false);
+      return;
+    }
+
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session) {
         setView('home');
@@ -68,6 +88,18 @@ export default function App() {
     return () => subscription.unsubscribe();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (GUEST_MODE && !initializing) {
+      localStorage.setItem(GUEST_ARCHIVE_KEY, JSON.stringify(archive));
+    }
+  }, [archive, initializing]);
+
+  useEffect(() => {
+    if (GUEST_MODE && !initializing) {
+      localStorage.setItem(GUEST_BOOKMARKS_KEY, JSON.stringify(bookmarks));
+    }
+  }, [bookmarks, initializing]);
 
   // ─── View helpers ────────────────────────────────────────────────────────────
   const goToView = useCallback((v: ViewId) => {
@@ -220,7 +252,7 @@ export default function App() {
         cards: generatedCards,
         summaryData,
       };
-      await addArchiveEntry(entry);
+      if (!GUEST_MODE) await addArchiveEntry(entry);
       setArchiveState((prev) => [entry, ...prev]);
       setSaved(true);
     }
@@ -238,13 +270,13 @@ export default function App() {
         desc: resource.desc,
         savedAt: new Date().toISOString().slice(0, 10),
       };
-      addBookmark(entry); // optimistic update, fire-and-forget
+      if (!GUEST_MODE) addBookmark(entry); // optimistic update, fire-and-forget
       return [entry, ...prev];
     });
   }, []);
 
   const handleDeleteBookmark = useCallback((id: string) => {
-    deleteBookmark(id); // fire-and-forget
+    if (!GUEST_MODE) deleteBookmark(id); // fire-and-forget
     setBookmarksState((prev) => prev.filter((b) => b.id !== id));
   }, []);
 
@@ -261,7 +293,7 @@ export default function App() {
 
   // ─── Archive delete ───────────────────────────────────────────────────────────
   const handleDelete = useCallback(async (id: string) => {
-    await deleteArchiveEntry(id);
+    if (!GUEST_MODE) await deleteArchiveEntry(id);
     setArchiveState((prev) => prev.filter((e) => e.id !== id));
   }, []);
 
@@ -291,7 +323,13 @@ export default function App() {
 
   return (
     <LangContext.Provider value={lang}>
-      <Header onGoHome={goHome} onShowArchive={showArchive} lang={lang} onLangChange={setLang} onLogout={handleLogout} />
+      <Header
+        onGoHome={goHome}
+        onShowArchive={showArchive}
+        lang={lang}
+        onLangChange={setLang}
+        onLogout={GUEST_MODE ? undefined : handleLogout}
+      />
       <main className={styles.main}>
         <div
           key={`home-${viewKey}`}
